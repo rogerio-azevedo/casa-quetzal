@@ -11,7 +11,12 @@ const COOKIE_NAME = 'casa-quetzal-token';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Rotas públicas
+  // Rotas públicas (sem autenticação)
+  if (pathname === '/invite') {
+    return NextResponse.next();
+  }
+
+  // Rota de login (com redirecionamento se autenticado)
   if (pathname === '/login') {
     // Se já está autenticado, redirecionar para home ou admin
     const token = request.cookies.get(COOKIE_NAME)?.value;
