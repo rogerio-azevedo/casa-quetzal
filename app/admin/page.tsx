@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
 import UserManagement from '../components/admin/UserManagement';
 import RecordManagement from '../components/admin/RecordManagement';
+import QRCodeModal from '../components/admin/QRCodeModal';
 
 type Tab = 'users' | 'records';
 
@@ -12,6 +13,7 @@ export default function AdminPage() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>('records');
+  const [showQRCode, setShowQRCode] = useState(false);
 
   // Verificar se é admin
   useEffect(() => {
@@ -49,15 +51,24 @@ export default function AdminPage() {
                 Casa Quetzal - Controle de Veículos
               </p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Administrador:</p>
-              <p className="font-semibold text-gray-900">{user.nome}</p>
+            <div className="flex items-center gap-4">
               <button
-                onClick={logout}
-                className="mt-2 text-sm text-red-600 hover:text-red-700 underline"
+                onClick={() => setShowQRCode(true)}
+                className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
               >
-                Sair
+                <span>📱</span>
+                <span>Gerar QR Code</span>
               </button>
+              <div className="text-right">
+                <p className="text-sm text-gray-600">Administrador:</p>
+                <p className="font-semibold text-gray-900">{user.nome}</p>
+                <button
+                  onClick={logout}
+                  className="mt-2 text-sm text-red-600 hover:text-red-700 underline"
+                >
+                  Sair
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -92,6 +103,13 @@ export default function AdminPage() {
             {activeTab === 'records' && <RecordManagement />}
           </div>
         </div>
+
+        {/* QR Code Modal */}
+        <QRCodeModal
+          isOpen={showQRCode}
+          onClose={() => setShowQRCode(false)}
+          url={typeof window !== 'undefined' ? window.location.origin : 'https://casa-quetzal.vercel.app'}
+        />
       </div>
     </div>
   );

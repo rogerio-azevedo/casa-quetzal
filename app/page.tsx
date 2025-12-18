@@ -7,6 +7,7 @@ import VehicleList from './components/VehicleList';
 import StatsSummary from './components/StatsSummary';
 import { VehicleRecord, VehicleActionType } from './types/vehicle';
 import { useAuth } from './hooks/useAuth';
+import { exportToPDF, exportToExcel } from './utils/export';
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -142,9 +143,27 @@ export default function Home() {
 
         {/* Vehicle List */}
         <div className="mt-4 md:mt-8">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">
-            Histórico de Registros
-          </h2>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3 md:mb-4">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900">
+              Histórico de Registros
+            </h2>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <button
+                onClick={() => exportToPDF(records)}
+                className="flex-1 sm:flex-none px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <span>📄</span>
+                <span>Exportar PDF</span>
+              </button>
+              <button
+                onClick={() => exportToExcel(records)}
+                className="flex-1 sm:flex-none px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <span>📊</span>
+                <span>Exportar Excel</span>
+              </button>
+            </div>
+          </div>
           <VehicleList records={records} onQuickExit={handleQuickExit} />
         </div>
 
