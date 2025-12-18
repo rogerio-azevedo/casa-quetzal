@@ -43,7 +43,7 @@ export function exportToPDF(records: VehicleRecord[]) {
     alternateRowStyles: { fillColor: [245, 245, 245] },
     didDrawPage: (data) => {
       // Estatísticas no final da última página
-      if (data.pageNumber === data.pageCount) {
+      if (data.pageNumber === data.pageCount && data.cursor) {
         const totalEntradas = records.filter((r) => r.tipo === 'entrada').length;
         const totalSaidas = records.filter((r) => r.tipo === 'saida').length;
         
