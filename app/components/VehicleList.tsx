@@ -63,7 +63,7 @@ export default function VehicleList({
             {sortedRecords.map((record) => (
               <tr key={record.id} className="hover:bg-gray-50">
                 <td className="px-2 md:px-4 py-2 md:py-4 whitespace-nowrap">
-                  <span className="font-semibold text-gray-900 text-xs md:text-sm">
+                  <span className="font-semibold text-gray-900 text-sm md:text-sm">
                     {record.placa}
                   </span>
                 </td>
@@ -92,13 +92,13 @@ export default function VehicleList({
                 <td className="px-2 md:px-4 py-2 md:py-4 text-xs text-gray-600 hidden lg:table-cell">
                   {record.userName || "-"}
                 </td>
-                <td className="px-2 md:px-4 py-2 md:py-4 text-xs">
+                <td className="px-2 md:px-4 py-2 md:py-4">
                   {record.tipo === "entrada" && onQuickExit && (
                     <button
                       onClick={() =>
                         onQuickExit(record.placa, record.condutor || "")
                       }
-                      className="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition-colors whitespace-nowrap"
+                      className="px-2 md:px-3 py-1.5 md:py-1 bg-red-600 text-white text-sm md:text-xs font-medium rounded hover:bg-red-700 transition-colors whitespace-nowrap"
                     >
                       Saída
                     </button>
