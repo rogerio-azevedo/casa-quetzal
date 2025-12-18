@@ -248,7 +248,7 @@ export default function RecordManagement() {
                   value={formData.placa}
                   onChange={(e) => setFormData({ ...formData, placa: e.target.value.toUpperCase() })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-500"
                 />
               </div>
 
@@ -260,7 +260,7 @@ export default function RecordManagement() {
                   type="text"
                   value={formData.condutor}
                   onChange={(e) => setFormData({ ...formData, condutor: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-500"
                 />
               </div>
 
@@ -269,7 +269,7 @@ export default function RecordManagement() {
                 <select
                   value={formData.tipo}
                   onChange={(e) => setFormData({ ...formData, tipo: e.target.value as VehicleActionType })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 >
                   <option value="entrada">Entrada</option>
                   <option value="saida">Saída</option>
@@ -285,7 +285,7 @@ export default function RecordManagement() {
                   value={formData.timestamp}
                   onChange={(e) => setFormData({ ...formData, timestamp: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
               </div>
 

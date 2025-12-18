@@ -77,6 +77,8 @@ export default function Home() {
         // Recarregar registros
         await loadRecords();
         setPendingRecord(null);
+        // Limpar formulário disparando um evento customizado
+        window.dispatchEvent(new CustomEvent('clearVehicleForm'));
       } else {
         alert('Erro ao criar registro: ' + data.message);
       }

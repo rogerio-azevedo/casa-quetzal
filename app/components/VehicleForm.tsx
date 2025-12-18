@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VehicleActionType } from '../types/vehicle';
 
 interface VehicleFormProps {
@@ -10,6 +10,17 @@ interface VehicleFormProps {
 export default function VehicleForm({ onSubmit }: VehicleFormProps) {
   const [placa, setPlaca] = useState('');
   const [condutor, setCondutor] = useState('');
+
+  // Ouvir evento para limpar o formulário
+  useEffect(() => {
+    const handleClear = () => {
+      setPlaca('');
+      setCondutor('');
+    };
+
+    window.addEventListener('clearVehicleForm', handleClear);
+    return () => window.removeEventListener('clearVehicleForm', handleClear);
+  }, []);
 
   const handleSubmit = (tipo: VehicleActionType) => {
     if (!placa.trim()) {
@@ -31,7 +42,7 @@ export default function VehicleForm({ onSubmit }: VehicleFormProps) {
             type="text"
             value={placa}
             onChange={(e) => setPlaca(e.target.value)}
-            placeholder="ABC-1234"
+            placeholder="ABC1D23"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900 placeholder:text-gray-500"
             maxLength={8}
           />
