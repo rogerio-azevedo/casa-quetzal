@@ -1,21 +1,23 @@
-'use client';
+"use client";
 
-import { VehicleRecord } from '../types/vehicle';
+import { VehicleRecord } from "../types/vehicle";
+import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+import { ptBR } from "date-fns/locale";
 
 interface VehicleListProps {
   records: VehicleRecord[];
+  onQuickExit?: (placa: string, condutor: string) => void;
 }
 
-export default function VehicleList({ records }: VehicleListProps) {
+export default function VehicleList({
+  records,
+  onQuickExit,
+}: VehicleListProps) {
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
-    return date.toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    const zonedDate = toZonedTime(date, "America/Sao_Paulo");
+    return format(zonedDate, "dd/MM/yyyy, HH:mm", { locale: ptBR });
   };
 
   // Ordenar por timestamp mais recente primeiro
@@ -33,53 +35,74 @@ export default function VehicleList({ records }: VehicleListProps) {
 
   return (
     <div className="w-full bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="max-h-[500px] overflow-y-auto">
-        <table className="w-full">
+      <div className="max-h-[500px] overflow-y-auto overflow-x-auto">
+        <table className="w-full text-sm md:text-base">
           <thead className="bg-gray-50 sticky top-0">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Placa
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">
                 Condutor
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Tipo
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">
                 Data/Hora
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase hidden lg:table-cell">
                 Registrado por
+              </th>
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Ações
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedRecords.map((record) => (
               <tr key={record.id} className="hover:bg-gray-50">
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <span className="font-semibold text-gray-900">{record.placa}</span>
-                </td>
-                <td className="px-4 py-4">
-                  <span className="text-gray-600">{record.condutor || '-'}</span>
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <span
-                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                      record.tipo === 'entrada'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {record.tipo === 'entrada' ? '→' : '←'}
-                    {record.tipo.toUpperCase()}
+                <td className="px-2 md:px-4 py-2 md:py-4 whitespace-nowrap">
+                  <span className="font-semibold text-gray-900 text-xs md:text-sm">
+                    {record.placa}
                   </span>
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 md:px-4 py-2 md:py-4 hidden md:table-cell">
+                  <span className="text-gray-600 text-xs md:text-sm">
+                    {record.condutor || "-"}
+                  </span>
+                </td>
+                <td className="px-2 md:px-4 py-2 md:py-4 whitespace-nowrap">
+                  <span
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                      record.tipo === "entrada"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
+                  >
+                    {record.tipo === "entrada" ? "→" : "←"}
+                    <span className="hidden sm:inline">
+                      {record.tipo.toUpperCase()}
+                    </span>
+                  </span>
+                </td>
+                <td className="px-2 md:px-4 py-2 md:py-4 whitespace-nowrap text-xs text-gray-500 hidden sm:table-cell">
                   {formatTimestamp(record.timestamp)}
                 </td>
-                <td className="px-4 py-4 text-sm text-gray-600">
-                  {record.userName || '-'}
+                <td className="px-2 md:px-4 py-2 md:py-4 text-xs text-gray-600 hidden lg:table-cell">
+                  {record.userName || "-"}
+                </td>
+                <td className="px-2 md:px-4 py-2 md:py-4 text-xs">
+                  {record.tipo === "entrada" && onQuickExit && (
+                    <button
+                      onClick={() =>
+                        onQuickExit(record.placa, record.condutor || "")
+                      }
+                      className="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition-colors whitespace-nowrap"
+                    >
+                      Saída
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -89,4 +112,3 @@ export default function VehicleList({ records }: VehicleListProps) {
     </div>
   );
 }
-

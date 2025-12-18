@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import type { VehicleRecord, VehicleActionType } from '@/app/types/vehicle';
+import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
+import { ptBR } from 'date-fns/locale';
 
 export default function RecordManagement() {
   const [records, setRecords] = useState<VehicleRecord[]>([]);
@@ -128,13 +131,8 @@ export default function RecordManagement() {
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
-    return date.toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    const zonedDate = toZonedTime(date, 'America/Sao_Paulo');
+    return format(zonedDate, 'dd/MM/yyyy, HH:mm', { locale: ptBR });
   };
 
   if (loading) {

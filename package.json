@@ -12,6 +12,8 @@
   "dependencies": {
     "@vercel/postgres": "^0.10.0",
     "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "jose": "^5.9.6",
     "next": "16.0.10",
     "react": "19.2.1",

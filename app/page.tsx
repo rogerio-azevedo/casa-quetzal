@@ -92,6 +92,10 @@ export default function Home() {
     setPendingRecord(null);
   };
 
+  const handleQuickExit = (placa: string, condutor: string) => {
+    setPendingRecord({ placa, condutor, tipo: 'saida' });
+  };
+
   if (loading || loadingRecords) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -104,25 +108,25 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 px-3 md:py-8 md:px-4">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-3 md:p-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-xl md:text-3xl font-bold text-gray-900">
                 Casa Quetzal
               </h1>
-              <p className="text-gray-600">
+              <p className="text-sm md:text-base text-gray-600">
                 Sistema de Controle de Veículos
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Logado como:</p>
-              <p className="font-semibold text-gray-900">{user?.nome}</p>
+              <p className="text-xs md:text-sm text-gray-600">Logado como:</p>
+              <p className="text-sm md:text-base font-semibold text-gray-900">{user?.nome}</p>
               <button
                 onClick={logout}
-                className="mt-2 text-sm text-red-600 hover:text-red-700 underline"
+                className="mt-1 text-xs md:text-sm text-red-600 hover:text-red-700 underline"
               >
                 Sair
               </button>
@@ -137,11 +141,11 @@ export default function Home() {
         <VehicleForm onSubmit={handleFormSubmit} />
 
         {/* Vehicle List */}
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="mt-4 md:mt-8">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">
             Histórico de Registros
           </h2>
-          <VehicleList records={records} />
+          <VehicleList records={records} onQuickExit={handleQuickExit} />
         </div>
 
         {/* Confirm Modal */}
