@@ -1,6 +1,6 @@
-import { sql } from '@vercel/postgres';
-import bcrypt from 'bcryptjs';
-import { NextResponse } from 'next/server';
+import { sql } from "@vercel/postgres";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -38,7 +38,7 @@ export async function GET() {
     await sql`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`;
 
     // Criar admin
-    const passwordHash = await bcrypt.hash('Quetzal25', 10);
+    const passwordHash = await bcrypt.hash("Quetzal25", 10);
     const result = await sql`
       INSERT INTO users (email, password_hash, nome, role, ativo)
       VALUES (
@@ -55,17 +55,19 @@ export async function GET() {
       RETURNING email, nome, role
     `;
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Banco inicializado com sucesso!',
-      admin: result.rows[0]
+    return NextResponse.json({
+      success: true,
+      message: "Banco inicializado com sucesso!",
+      admin: result.rows[0],
     });
-  } catch (error: any) {
-    console.error('Erro ao inicializar banco:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message 
-    }, { status: 500 });
+  } catch (error) {
+    console.error("Erro ao inicializar banco:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Erro desconhecido",
+      },
+      { status: 500 }
+    );
   }
 }
-
