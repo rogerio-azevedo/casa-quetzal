@@ -3,9 +3,16 @@
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 
+function getBaseUrl() {
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return "https://casa-quetzal.vercel.app";
+}
+
 export default function InvitePage() {
-  // Pegar URL base diretamente
-  const url = typeof window !== "undefined" ? window.location.origin : "";
+  // URL base aponta para raiz (redireciona para login via middleware)
+  const url = getBaseUrl();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center px-4 py-8">

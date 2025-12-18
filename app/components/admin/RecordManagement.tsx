@@ -5,6 +5,7 @@ import type { VehicleRecord, VehicleActionType } from '@/app/types/vehicle';
 import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { ptBR } from 'date-fns/locale';
+import { exportToPDF, exportToExcel } from '@/app/utils/export';
 
 export default function RecordManagement() {
   const [records, setRecords] = useState<VehicleRecord[]>([]);
@@ -141,10 +142,28 @@ export default function RecordManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold text-gray-900">Gerenciar Registros de Veículos</h2>
-        <div className="text-sm text-gray-600">
-          Total: <span className="font-semibold">{records.length}</span> registros
+        <div className="flex items-center gap-3">
+          <div className="text-sm text-gray-600">
+            Total: <span className="font-semibold">{records.length}</span> registros
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => exportToPDF(records)}
+              className="px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+            >
+              <span>📄</span>
+              <span>Exportar PDF</span>
+            </button>
+            <button
+              onClick={() => exportToExcel(records)}
+              className="px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            >
+              <span>📊</span>
+              <span>Exportar Excel</span>
+            </button>
+          </div>
         </div>
       </div>
 
