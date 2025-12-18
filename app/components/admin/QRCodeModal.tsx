@@ -56,10 +56,71 @@ export default function QRCodeModal({ isOpen, onClose, url }: QRCodeModalProps) 
     img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   };
 
-  const handleShareWhatsApp = () => {
-    const message = `Acesse o sistema de controle de veículos:\n${url}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+  const handleShareWhatsApp = async () => {
+    try {
+      // Gerar imagem do QR Code
+      const svg = document.querySelector(".qrcode svg") as SVGElement;
+      if (!svg) return;
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+
+      img.onload = async () => {
+        const scale = 4;
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+        
+        if (ctx) {
+          ctx.scale(scale, scale);
+          ctx.drawImage(img, 0, 0);
+          
+          canvas.toBlob(async (blob) => {
+            if (!blob) return;
+
+            const file = new File([blob], "casa-quetzal-qrcode.png", { type: "image/png" });
+
+            // Tentar usar Web Share API (suporta compartilhamento de arquivos)
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+              try {
+                await navigator.share({
+                  files: [file],
+                  title: "QR Code - Casa Quetzal",
+                  text: "Escaneie este QR Code para acessar o sistema de controle de veículos",
+                });
+              } catch (error) {
+                // Se o usuário cancelar, não fazer nada
+                if ((error as Error).name !== "AbortError") {
+                  console.error("Erro ao compartilhar:", error);
+                }
+              }
+            } else {
+              // Fallback: fazer download e instruir
+              const downloadUrl = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = downloadUrl;
+              link.download = "casa-quetzal-qrcode.png";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(downloadUrl);
+              
+              // Abrir WhatsApp após download
+              setTimeout(() => {
+                alert("QR Code baixado! Agora você pode enviá-lo pelo WhatsApp.");
+                const whatsappUrl = `https://wa.me/`;
+                window.open(whatsappUrl, "_blank");
+              }, 100);
+            }
+          }, "image/png");
+        }
+      };
+
+      img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+    } catch (error) {
+      console.error("Erro ao compartilhar QR Code:", error);
+    }
   };
 
   const handleCopyUrl = () => {
