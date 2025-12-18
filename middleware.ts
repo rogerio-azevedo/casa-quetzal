@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
     if (token) {
       try {
         const verified = await jwtVerify(token, JWT_SECRET);
-        const payload = verified.payload as any;
+        const payload = verified.payload as { role?: string };
         
         if (payload.role === 'admin') {
           return NextResponse.redirect(new URL('/admin', request.url));
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
 
   try {
     const verified = await jwtVerify(token, JWT_SECRET);
-    const payload = verified.payload as any;
+    const payload = verified.payload as { role?: string };
 
     // Verificar acesso admin
     if (pathname.startsWith('/admin')) {

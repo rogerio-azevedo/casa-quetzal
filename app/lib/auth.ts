@@ -9,7 +9,7 @@ const JWT_SECRET = new TextEncoder().encode(
 const COOKIE_NAME = 'casa-quetzal-token';
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 dias em segundos
 
-export interface JWTPayload {
+export interface AuthPayload {
   userId: number;
   email: string;
   nome: string;
@@ -27,7 +27,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 // Criar token JWT
-export async function createToken(payload: JWTPayload): Promise<string> {
+export async function createToken(payload: AuthPayload): Promise<string> {
   const token = await new SignJWT(payload as any)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -38,10 +38,10 @@ export async function createToken(payload: JWTPayload): Promise<string> {
 }
 
 // Verificar e decodificar token JWT
-export async function verifyToken(token: string): Promise<JWTPayload | null> {
+export async function verifyToken(token: string): Promise<AuthPayload | null> {
   try {
     const verified = await jwtVerify(token, JWT_SECRET);
-    return verified.payload as JWTPayload;
+    return verified.payload as AuthPayload;
   } catch (error) {
     return null;
   }
@@ -67,7 +67,7 @@ export async function getAuthToken(): Promise<string | null> {
 }
 
 // Obter usuário autenticado do cookie
-export async function getAuthUser(): Promise<JWTPayload | null> {
+export async function getAuthUser(): Promise<AuthPayload | null> {
   const token = await getAuthToken();
   if (!token) return null;
   
@@ -81,7 +81,7 @@ export async function clearAuthCookie() {
 }
 
 // Verificar se é admin
-export async function requireAdmin(): Promise<JWTPayload> {
+export async function requireAdmin(): Promise<AuthPayload> {
   const user = await getAuthUser();
   
   if (!user) {
@@ -96,7 +96,7 @@ export async function requireAdmin(): Promise<JWTPayload> {
 }
 
 // Verificar autenticação (admin ou vigia)
-export async function requireAuth(): Promise<JWTPayload> {
+export async function requireAuth(): Promise<AuthPayload> {
   const user = await getAuthUser();
   
   if (!user) {
