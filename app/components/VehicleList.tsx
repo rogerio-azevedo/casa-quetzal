@@ -42,7 +42,7 @@ export default function VehicleList({
               <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Placa
               </th>
-              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">
+              <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase hidden lg:table-cell">
                 Condutor
               </th>
               <th className="px-2 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -67,7 +67,7 @@ export default function VehicleList({
                     {record.placa}
                   </span>
                 </td>
-                <td className="px-2 md:px-4 py-2 md:py-4 hidden md:table-cell">
+                <td className="px-2 md:px-4 py-2 md:py-4 hidden lg:table-cell">
                   <span className="text-gray-600 text-xs md:text-sm">
                     {record.condutor || "-"}
                   </span>

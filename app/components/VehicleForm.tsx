@@ -41,9 +41,9 @@ export default function VehicleForm({ onSubmit }: VehicleFormProps) {
             id="placa"
             type="text"
             value={placa}
-            onChange={(e) => setPlaca(e.target.value)}
+            onChange={(e) => setPlaca(e.target.value.toUpperCase())}
             placeholder="ABC1D23"
-            className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base md:text-lg text-gray-900 placeholder:text-gray-500"
+            className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base md:text-lg text-gray-900 placeholder:text-gray-500 uppercase"
             maxLength={8}
           />
         </div>
